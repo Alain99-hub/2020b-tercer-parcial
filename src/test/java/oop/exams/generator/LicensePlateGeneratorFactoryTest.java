@@ -1,5 +1,6 @@
 package oop.exams.generator;
 
+import oop.exams.model.Region;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -80,8 +81,53 @@ class LicensePlateGeneratorFactoryTest {
             LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(state);
 
             // Then:
-            assertThat(instance).isInstanceOf(DefaultLicensePlateGenerator.class);
+            assertThat(instance).isInstanceOf(CenterLicensePlateGenerator.class);
         }
     }
+    @Test
+    public void givenANorthRegion_whenGetInstance_thenNorthGeneratorIsReturned() {
+        // Given:
 
+            LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(Region.NORTH);
+
+            // Then:
+            assertThat(instance).isInstanceOf(NorthLicensePlateGenerator.class);
+        }
+
+    @Test
+    public void givenAEastRegion_whenGetInstance_thenEastGeneratorIsReturned() {
+        // Given:
+
+        LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(Region.EAST);
+
+        // Then:
+        assertThat(instance).isInstanceOf(EastLicensePlateGenerator.class);
+    }
+    @Test
+    public void givenAWestRegion_whenGetInstance_thenWestGeneratorIsReturned() {
+        // Given:
+
+        LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(Region.WEST);
+
+        // Then:
+        assertThat(instance).isInstanceOf(WestLicensePlateGenerator.class);
+    }
+    @Test
+    public void givenASouthRegion_whenGetInstance_thenSouthGeneratorIsReturned() {
+        // Given:
+
+        LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(Region.SOUTH);
+
+        // Then:
+        assertThat(instance).isInstanceOf(SouthLicensePlateGenerator.class);
+    }
+    @Test
+    public void givenACenterRegion_whenGetInstance_thenCenterGeneratorIsReturned() {
+        // Given:
+
+        LicensePlateGenerator instance = licensePlateGeneratorFactory.getInstance(Region.CENTER);
+
+        // Then:
+        assertThat(instance).isInstanceOf(CenterLicensePlateGenerator.class);
+    }
 }

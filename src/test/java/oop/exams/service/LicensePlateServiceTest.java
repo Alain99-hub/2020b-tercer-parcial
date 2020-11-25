@@ -1,17 +1,20 @@
 package oop.exams.service;
 
+import oop.exams.exception.BadRegionException;
 import oop.exams.exception.NotAvailableLicensePlateException;
 import oop.exams.generator.LicensePlateGenerator;
 import oop.exams.generator.LicensePlateGeneratorFactory;
 import oop.exams.model.Region;
 import oop.exams.repository.LicensePlateRepository;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class LicensePlateServiceTest {
 
-
+        @Test
     public void givenAValidState_whenGenerate_thenLicensePlateIsReturned() throws NotAvailableLicensePlateException {
         // Given:
         LicensePlateGeneratorFactory factory = mock(LicensePlateGeneratorFactory.class);
@@ -37,5 +40,27 @@ class LicensePlateServiceTest {
         verify(generator).generate(state);
         verify(repository).save(Region.CENTER, licensePlate);
         verifyNoMoreInteractions(repository, factory, generator);
+    }
+    @Test
+    public void givenAValidState_whenGenerate_thenLicensePlateIsNotReturned() throws NotAvailableLicensePlateException {
+        // Given:
+        LicensePlateGeneratorFactory factory = mock(LicensePlateGeneratorFactory.class);
+        LicensePlateRepository repository = mock(LicensePlateRepository.class);
+        LicensePlateGenerator generator = mock(LicensePlateGenerator.class);
+        LicensePlateService licensePlateService = new LicensePlateService(factory, repository);
+        String state = "WEST";
+        String expectedLicensePlate = "ABC1234";
+        when(repository.getRegionByState(state)).thenReturn(Region.WEST);
+        when(repository.countByRegion(Region.WEST)).thenReturn(5);
+        when(factory.getInstance(Region.WEST)).thenReturn(generator);
+        when(generator.generate(state)).thenReturn(expectedLicensePlate);
+        // When:
+
+        // Then:
+        assertThatThrownBy(() -> licensePlateService.generate(state))
+                .isInstanceOf(NotAvailableLicensePlateException.class);
+
+
+
     }
 }
